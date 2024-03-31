@@ -2,4 +2,5 @@
 resources:
 - homer_v1alpha1_dashboard.yaml
 - homer_v1alpha1_service.yaml
+- homer_v1alpha1_item.yaml
 #+kubebuilder:scaffold:manifestskustomizesamples
