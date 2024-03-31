@@ -17,4 +17,13 @@ resources:
   kind: Dashboard
   path: github.com/rajsinghtech/homer-operator.git/api/v1alpha1
   version: v1alpha1
+- api:
+    crdVersion: v1
+    namespaced: true
+  controller: true
+  domain: rajsingh.info
+  group: homer
+  kind: Service
+  path: github.com/rajsinghtech/homer-operator.git/api/v1alpha1
+  version: v1alpha1
 version: "3"
