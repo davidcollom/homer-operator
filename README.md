@@ -1,100 +1,114 @@
-<h1 align="center">
- <img
-  width="180"
-  alt="Homer's donut"
-  src="https://raw.githubusercontent.com/rajsinghtech/homer-operator/main/homer/Homer-Operator.png">
-    <br/>
-    Homer-Operator
-</h1>
+# homer-operator
+// TODO(user): Add simple overview of use/purpose
 
-The `homer-operator` is a Kubernetes operator designed to simplify the deployment and management of dynamic dashboards using the [bastienwirtz/homer](https://github.com/bastienwirtz/homer) container. This operator leverages Homer's extensible YAML configuration methodologies to automatically generate and update dashboards based on existing Ingress and API Gateway resources within the Kubernetes cluster.
+## Description
+// TODO(user): An in-depth paragraph about your project and overview of use
 
-## Features
+## Getting Started
 
-- Automatic generation of dynamic dashboards based on existing Ingress and API Gateway resources.
-- Simplified management of dashboards through Kubernetes custom resources.
-- Utilizes Kubebuilder for seamless integration with Kubernetes.
+### Prerequisites
+- go version v1.21.0+
+- docker version 17.03+.
+- kubectl version v1.11.3+.
+- Access to a Kubernetes v1.11.3+ cluster.
 
-## Prerequisites
+### To Deploy on the cluster
+**Build and push your image to the location specified by `IMG`:**
 
-Before running the `homer-operator`, ensure you have the following prerequisites installed:
-
-- Kubernetes cluster (locally or externally accessible)
-- `kubectl` configured to access the cluster
-- Docker (if building the operator locally)
-
-## Installation
-
-### Running Locally
-
-To run the `homer-operator` locally, follow these steps:
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/rajsinghtech/homer-operator.git
-   ```
-
-2. Change directory to the project:
-
-   ```bash
-   cd homer-operator
-   ```
-
-3. Build the operator:
-
-   ```bash
-   make install
-   make build
-   ```
-
-4. Deploy the operator to your Kubernetes cluster:
-
-   ```bash
-   make deploy
-   ```
-
-### Running Externally
-
-To run the `homer-operator` on an externally accessible Kubernetes cluster, you can use the pre-built Docker image available on Docker Hub:
-
-```bash
-kubectl apply -f https://raw.githubusercontent.com/rajsinghtech/homer-operator/main/deploy/operator.yaml
+```sh
+make docker-build docker-push IMG=<some-registry>/homer-operator:tag
 ```
 
-This command will deploy the operator to your Kubernetes cluster using the pre-built Docker image.
+**NOTE:** This image ought to be published in the personal registry you specified.
+And it is required to have access to pull the image from the working environment.
+Make sure you have the proper permission to the registry if the above commands don’t work.
 
-## Usage
+**Install the CRDs into the cluster:**
 
-Once the `homer-operator` is running in your Kubernetes cluster, you can start creating dynamic dashboards by defining custom resources.
-
-For example, you can create a dashboard for a specific application by defining a `Dashboard` custom resource:
-
-```yaml
-apiVersion: homer.rajsingh.info/v1alpha1
-kind: Dashboard
-metadata:
-  name: dashboard-sample
-spec:
-  homerConfig:
-    title: "Raj's Dashboard"
-    subtitle: "Raj's Subtitle"
-    # theme: default
-    header: "false"
-    footer: '<p>Homer-Operator</p>' 
-    # columns: "3"
-    logo: "https://raw.githubusercontent.com/rajsinghtech/homer-operator/main/homer/Homer-Operator.png"
-    defaults:
-      layout: list
-      colorTheme: auto
-  configMap:
-    name: "raj-config"
-    key: "raj-key" 
-
+```sh
+make install
 ```
 
-This YAML manifest instructs the `homer-operator` to generate a dashboard titled "My Application Dashboard" with a description for monitoring an application labeled `app: my-application` within the namespace `my-namespace`.
+**Deploy the Manager to the cluster with the image specified by `IMG`:**
+
+```sh
+make deploy IMG=<some-registry>/homer-operator:tag
+```
+
+> **NOTE**: If you encounter RBAC errors, you may need to grant yourself cluster-admin
+privileges or be logged in as admin.
+
+**Create instances of your solution**
+You can apply the samples (examples) from the config/sample:
+
+```sh
+kubectl apply -k config/samples/
+```
+
+>**NOTE**: Ensure that the samples has default values to test it out.
+
+### To Uninstall
+**Delete the instances (CRs) from the cluster:**
+
+```sh
+kubectl delete -k config/samples/
+```
+
+**Delete the APIs(CRDs) from the cluster:**
+
+```sh
+make uninstall
+```
+
+**UnDeploy the controller from the cluster:**
+
+```sh
+make undeploy
+```
+
+## Project Distribution
+
+Following are the steps to build the installer and distribute this project to users.
+
+1. Build the installer for the image built and published in the registry:
+
+```sh
+make build-installer IMG=<some-registry>/homer-operator:tag
+```
+
+NOTE: The makefile target mentioned above generates an 'install.yaml'
+file in the dist directory. This file contains all the resources built
+with Kustomize, which are necessary to install this project without
+its dependencies.
+
+2. Using the installer
+
+Users can just run kubectl apply -f <URL for YAML BUNDLE> to install the project, i.e.:
+
+```sh
+kubectl apply -f https://raw.githubusercontent.com/<org>/homer-operator/<tag or branch>/dist/install.yaml
+```
 
 ## Contributing
+// TODO(user): Add detailed information on how you would like others to contribute to this project
 
-We welcome contributions from the community. If you have any ideas, feature requests, or bug fixes, please feel free to open an issue or submit a pull request on [GitHub](https://github.com/rajsinghtech/homer-operator).
+**NOTE:** Run `make help` for more information on all potential `make` targets
+
+More information can be found via the [Kubebuilder Documentation](https://book.kubebuilder.io/introduction.html)
+
+## License
+
+Copyright 2024 RajSingh.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+

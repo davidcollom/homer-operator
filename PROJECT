@@ -7,20 +7,4 @@ layout:
 - go.kubebuilder.io/v4
 projectName: homer-operator
 repo: github.com/rajsinghtech/homer-operator.git
-resources:
-- api:
-    crdVersion: v1
-    namespaced: true
-  controller: true
-  domain: rajsingh.info
-  group: homer
-  kind: Dashboard
-  path: github.com/rajsinghtech/homer-operator.git/api/v1alpha1
-  version: v1alpha1
-- controller: true
-  domain: k8s.io
-  group: networking
-  kind: Ingress
-  path: k8s.io/api/networking/v1
-  version: v1
 version: "3"
